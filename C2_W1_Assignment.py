@@ -70,7 +70,7 @@
 
 # Let's import all of the required packages. In addition to the ones you have been using in this Course before, you will need to import `pandas` library. It is a commonly used package for data manipulation and analysis. 
 
-# In[ ]:
+# In[1]:
 
 
 # A function to perform automatic differentiation.
@@ -88,7 +88,7 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 
 # Load the unit tests defined for this notebook.
 
-# In[ ]:
+# In[2]:
 
 
 import w1_unittest
@@ -101,7 +101,7 @@ import w1_unittest
 
 # Historical prices for both suppliers A and B are saved in the file `data/prices.csv`. To open it you can use `pandas` function `read_csv`. This example is very simple, there is no need to use any other parameters.
 
-# In[ ]:
+# In[4]:
 
 
 df = pd.read_csv('data/prices.csv')
@@ -111,7 +111,7 @@ df = pd.read_csv('data/prices.csv')
 # 
 # View the data with a standard `print` function:
 
-# In[ ]:
+# In[5]:
 
 
 print(df)
@@ -119,7 +119,7 @@ print(df)
 
 # To print a list of the column names use `columns` attribute of the DataFrame:
 
-# In[ ]:
+# In[6]:
 
 
 print(df.columns)
@@ -129,7 +129,7 @@ print(df.columns)
 # 
 # To access the values of one column of the DataFrame you can use the column name as an attribute. For example, the following code will output `date` column of the DataFrame `df`:
 
-# In[ ]:
+# In[7]:
 
 
 df.date
@@ -151,18 +151,18 @@ df.date
 # </ul>
 # </p>
 
-# In[ ]:
+# In[10]:
 
 
 ### START CODE HERE ### (~ 4 lines of code)
-prices_A = None
-prices_B = None
-prices_A = None(None).astype('None')
-prices_B = None(None).astype('None')
+prices_A = df.price_supplier_a_dollars_per_item
+prices_B = df.price_supplier_b_dollars_per_item
+prices_A = np.array(prices_A).astype('float32')
+prices_B = np.array(prices_B).astype('float32')
 ### END CODE HERE ###
 
 
-# In[ ]:
+# In[11]:
 
 
 # Print some elements and mean values of the prices_A and prices_B arrays.
@@ -181,7 +181,7 @@ print("Average of the prices, supplier B:", np.mean(prices_B))
 # Average of the prices, supplier B: 100.0
 # ```
 
-# In[ ]:
+# In[12]:
 
 
 w1_unittest.test_load_and_convert_data(prices_A, prices_B)
@@ -189,7 +189,7 @@ w1_unittest.test_load_and_convert_data(prices_A, prices_B)
 
 # Average prices from both suppliers are similar. But if you will plot the historical prices, you will see that there were periods of time when the prices were lower for supplier A, and vice versa.
 
-# In[ ]:
+# In[13]:
 
 
 fig = plt.figure()
@@ -216,12 +216,12 @@ plt.show()
 # 
 # $$\mathcal{L}\left(\omega\right) = \frac{1}{k}\sum_{i=1}^{k}\left(f^i \left(\omega\right) -  \overline{f\left (\omega\right)}\right)^2$$
 
-# In[ ]:
+# In[14]:
 
 
 def f_of_omega(omega, pA, pB):
     ### START CODE HERE ### (~ 1 line of code)
-    f = None
+    f = pA * omega + pB * (1 - omega)
     ### END CODE HERE ###
     return f
 
@@ -229,7 +229,7 @@ def L_of_omega(omega, pA, pB):
     return 1/len(f_of_omega(omega, pA, pB)) * np.sum((f_of_omega(omega, pA, pB) - np.mean(f_of_omega(omega, pA, pB)))**2)
 
 
-# In[ ]:
+# In[15]:
 
 
 print("L(omega = 0) =",L_of_omega(0, prices_A, prices_B))
@@ -247,7 +247,7 @@ print("L(omega = 1) =",L_of_omega(1, prices_A, prices_B))
 # L(omega = 1) = 27.48
 # ```
 
-# In[ ]:
+# In[16]:
 
 
 w1_unittest.test_f_of_omega(f_of_omega)
@@ -266,7 +266,7 @@ w1_unittest.test_f_of_omega(f_of_omega)
 # 
 # *Note*: `jax.numpy` has been uploaded instead of the original `NumPy`. Up to this moment `jax` functionality has not been actually used, but it will be called in the cells below. Thus there was no need to upload both versions of the package, and you have to use `.at[<index>].set(<value>)` function to update the array.
 
-# In[ ]:
+# In[23]:
 
 
 # Parameter endpoint=True will allow ending point 1 to be included in the array.
@@ -281,8 +281,8 @@ def L_of_omega_array(omega_array, pA, pB):
 
     for i in range(N):
         ### START CODE HERE ### (~ 2 lines of code)
-        L = None(None[None], None, None)
-        L_array = L_array.at[None].set(None)
+        L = L_of_omega(omega_array[i], pA, pB)
+        L_array = L_array.at[i].set(L)
         ### END CODE HERE ###
         
     return L_array
@@ -290,7 +290,7 @@ def L_of_omega_array(omega_array, pA, pB):
 L_array = L_of_omega_array(omega_array, prices_A, prices_B)
 
 
-# In[ ]:
+# In[24]:
 
 
 print("L(omega = 0) =",L_array[0])
@@ -304,7 +304,7 @@ print("L(omega = 1) =",L_array[N-1])
 # L(omega = 1) = 27.48
 # ```
 
-# In[ ]:
+# In[25]:
 
 
 w1_unittest.test_L_of_omega_array(L_of_omega_array)
@@ -312,7 +312,7 @@ w1_unittest.test_L_of_omega_array(L_of_omega_array)
 
 # Now a minimum point of the function $\mathcal{L}\left(\omega\right)$ can be found with a `NumPy` function `argmin()`. As there were $N = 1001$ points taken in the segment $\left[0, 1\right]$, the result will be accurate to three decimal places:
 
-# In[ ]:
+# In[26]:
 
 
 i_opt = L_array.argmin()
@@ -342,7 +342,7 @@ print(f'omega_min = {omega_opt:.3f}\nL_of_omega_min = {L_opt:.7f}')
 # </ul>
 # </p>
 
-# In[ ]:
+# In[29]:
 
 
 # This is organised as a function only for grading purposes.
@@ -352,8 +352,8 @@ def dLdOmega_of_omega_array(omega_array, pA, pB):
 
     for i in range(N):
         ### START CODE HERE ### (~ 2 lines of code)
-        dLdOmega = None(None)(None[None], None, None)
-        dLdOmega_array = dLdOmega_array.at[None].set(None)
+        dLdOmega = grad(L_of_omega, argnums=0)(omega_array[i], pA, pB)
+        dLdOmega_array = dLdOmega_array.at[i].set(dLdOmega)
         ### END CODE HERE ###
         
     return dLdOmega_array
@@ -361,7 +361,7 @@ def dLdOmega_of_omega_array(omega_array, pA, pB):
 dLdOmega_array = dLdOmega_of_omega_array(omega_array, prices_A, prices_B)
 
 
-# In[ ]:
+# In[30]:
 
 
 print("dLdOmega(omega = 0) =",dLdOmega_array[0])
@@ -375,7 +375,7 @@ print("dLdOmega(omega = 1) =",dLdOmega_array[N-1])
 # dLdOmega(omega = 1) = 122.47999
 # ```
 
-# In[ ]:
+# In[32]:
 
 
 w1_unittest.test_dLdOmega_of_omega_array(dLdOmega_of_omega_array)
@@ -383,7 +383,7 @@ w1_unittest.test_dLdOmega_of_omega_array(dLdOmega_of_omega_array)
 
 # Now to find the closest value of the derivative to $0$, take absolute values $\left|\frac{d\mathcal{L}}{d\omega}\right|$ for each omega and find minimum of them.
 
-# In[ ]:
+# In[33]:
 
 
 i_opt_2 = np.abs(dLdOmega_array).argmin()
@@ -394,7 +394,7 @@ print(f'omega_min = {omega_opt_2:.3f}\ndLdOmega_min = {dLdOmega_opt_2:.7f}')
 
 # The result is the same: $\omega = 0.702$. Let's plot $\mathcal{L}\left(\omega\right)$ and $\frac{d\mathcal{L}}{d\omega}$ to visualize the graphs of them, minimum point of the function $\mathcal{L}\left(\omega\right)$ and the point where its derivative is around $0$:
 
-# In[ ]:
+# In[34]:
 
 
 fig = plt.figure()
@@ -407,8 +407,8 @@ ax.spines['top'].set_color('none')
 ax.xaxis.set_ticks_position('bottom')
 ax.yaxis.set_ticks_position('left')
 
-plt.plot(omega_array,  L_array, "black", label =r"$\mathcal{L}\left(\omega\right)$")
-plt.plot(omega_array,  dLdOmega_array, "orange", label =r"$\mathcal{L}\'\left(\omega\right)$")
+plt.plot(omega_array,  L_array, "black", label = "$\mathcal{L}\\left(\omega\\right)$")
+plt.plot(omega_array,  dLdOmega_array, "orange", label = "$\mathcal{L}\'\\left(\omega\\right)$")
 plt.plot([omega_opt, omega_opt_2], [L_opt,dLdOmega_opt_2], 'ro', markersize=3)
 
 plt.legend()
