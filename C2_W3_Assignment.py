@@ -39,7 +39,7 @@
 # 
 # First, import all the packages you will need during this assignment.
 
-# In[ ]:
+# In[1]:
 
 
 import numpy as np
@@ -57,7 +57,7 @@ np.random.seed(3)
 
 # Load the unit tests defined for this notebook.
 
-# In[ ]:
+# In[2]:
 
 
 import w3_unittest
@@ -70,7 +70,7 @@ import w3_unittest
 # 
 # Imagine that now you have a more complicated problem: you still have two classes, but one line will not be enough to separate them.
 
-# In[ ]:
+# In[3]:
 
 
 fig, ax = plt.subplots()
@@ -332,7 +332,7 @@ plt.plot()
 # 
 # First, let's get the dataset you will work on. The following code will create $m=2000$ data points $(x_1, x_2)$ and save them in the `NumPy` array `X` of a shape $(2 \times m)$ (in the columns of the array). The labels ($0$: blue, $1$: red) will be saved in the `NumPy` array `Y` of a shape $(1 \times m)$.
 
-# In[ ]:
+# In[4]:
 
 
 m = 2000
@@ -360,18 +360,18 @@ print ('I have m = %d training examples!' % (m))
 # 
 # Define sigmoid activation function $\sigma\left(z\right) =\frac{1}{1+e^{-z}} $.
 
-# In[ ]:
+# In[5]:
 
 
 def sigmoid(z):
     ### START CODE HERE ### (~ 1 line of code)
-    res = None
+    res = 1 / (1 + np.exp(-z))
     ### END CODE HERE ###
     
     return res
 
 
-# In[ ]:
+# In[6]:
 
 
 print("sigmoid(-2) = " + str(sigmoid(-2)))
@@ -389,7 +389,7 @@ print("sigmoid(3.5) = " + str(sigmoid(3.5)))
 # sigmoid(3.5) = 0.9706877692486436
 # ```
 
-# In[ ]:
+# In[7]:
 
 
 w3_unittest.test_sigmoid(sigmoid)
@@ -421,7 +421,7 @@ w3_unittest.test_sigmoid(sigmoid)
 # </ul>
 # </p>
 
-# In[ ]:
+# In[8]:
 
 
 # GRADED FUNCTION: layer_sizes
@@ -439,16 +439,16 @@ def layer_sizes(X, Y):
     """
     ### START CODE HERE ### (~ 3 lines of code)
     # Size of input layer.
-    n_x = None
+    n_x = X.shape[0]
     # Size of hidden layer.
-    n_h = None
+    n_h = 2
     # Size of output layer.
-    n_y = None 
+    n_y = Y.shape[0]
     ### END CODE HERE ###
     return (n_x, n_h, n_y)
 
 
-# In[ ]:
+# In[9]:
 
 
 (n_x, n_h, n_y) = layer_sizes(X, Y)
@@ -465,7 +465,7 @@ print("The size of the output layer is: n_y = " + str(n_y))
 # The size of the output layer is: n_y = 1
 # ```
 
-# In[ ]:
+# In[10]:
 
 
 w3_unittest.test_layer_sizes(layer_sizes)
@@ -486,7 +486,7 @@ w3_unittest.test_layer_sizes(layer_sizes)
 # - You will initialize the bias vector as zeros. 
 #     - Use: `np.zeros((a,b))` to initialize a matrix of shape (a,b) with zeros.
 
-# In[ ]:
+# In[11]:
 
 
 # GRADED FUNCTION: initialize_parameters
@@ -507,10 +507,10 @@ def initialize_parameters(n_x, n_h, n_y):
     """
     
     ### START CODE HERE ### (~ 4 lines of code)
-    W1 = None
-    b1 = None
-    W2 = None
-    b2 = None
+    W1 = np.random.randn(n_h, n_x) * 0.01
+    b1 = np.zeros((n_h, 1))
+    W2 = np.random.randn(n_y, n_h) * 0.01
+    b2 = np.zeros((n_y, 1))
     ### END CODE HERE ###
     
     assert (W1.shape == (n_h, n_x))
@@ -526,7 +526,7 @@ def initialize_parameters(n_x, n_h, n_y):
     return parameters
 
 
-# In[ ]:
+# In[12]:
 
 
 parameters = initialize_parameters(n_x, n_h, n_y)
@@ -549,7 +549,7 @@ print("b2 = " + str(parameters["b2"]))
 # b2 = [[0.]]
 # ```
 
-# In[ ]:
+# In[13]:
 
 
 # Note: 
@@ -577,7 +577,7 @@ w3_unittest.test_initialize_parameters(initialize_parameters)
 #     1. Retrieve each parameter from the dictionary "parameters" (which is the output of `initialize_parameters()`) by using `parameters[".."]`.
 #     2. Implement Forward Propagation. Compute `Z1` multiplying matrices `W1`, `X` and adding vector `b1`. Then find `A1` using the `sigmoid` activation function. Perform similar computations for `Z2` and `A2`.
 
-# In[ ]:
+# In[14]:
 
 
 # GRADED FUNCTION: forward_propagation
@@ -595,18 +595,18 @@ def forward_propagation(X, parameters):
     """
     # Retrieve each parameter from the dictionary "parameters".
     ### START CODE HERE ### (~ 4 lines of code)
-    W1 = None
-    b1 = None
-    W2 = None
-    b2 = None
+    W1 = parameters["W1"]
+    b1 = parameters["b1"]
+    W2 = parameters["W2"]
+    b2 = parameters["b2"]
     ### END CODE HERE ###
     
     # Implement forward propagation to calculate A2.
     ### START CODE HERE ### (~ 4 lines of code)
-    Z1 = None
-    A1 = None
-    Z2 = None
-    A2 = None
+    Z1 = np.dot(W1, X) + b1
+    A1 = sigmoid(Z1)
+    Z2 = np.dot(W2, A1) + b2
+    A2 = sigmoid(Z2)
     ### END CODE HERE ###
     
     assert(A2.shape == (n_y, X.shape[1]))
@@ -619,7 +619,7 @@ def forward_propagation(X, parameters):
     return A2, cache
 
 
-# In[ ]:
+# In[15]:
 
 
 A2, cache = forward_propagation(X, parameters)
@@ -634,7 +634,7 @@ print(A2)
 # [[0.49920157 0.49922234 0.49921223 ... 0.49921215 0.49921043 0.49920665]]
 # ```
 
-# In[ ]:
+# In[16]:
 
 
 # Note: 
@@ -651,7 +651,7 @@ w3_unittest.test_forward_propagation(forward_propagation)
 # 
 # $$\mathcal{L}\left(W, b\right)  = \frac{1}{m}\sum_{i=1}^{m}  \large\left(\small - y^{(i)}\log\left(a^{(i)}\right) - (1-y^{(i)})\log\left(1- a^{(i)}\right)  \large  \right) \small.$$
 
-# In[ ]:
+# In[17]:
 
 
 def compute_cost(A2, Y):
@@ -670,8 +670,8 @@ def compute_cost(A2, Y):
     m = Y.shape[1]
     
     ### START CODE HERE ### (~ 2 lines of code)
-    logloss = None
-    cost = None
+    logloss = - (Y * np.log(A2) + (1 - Y) * np.log(1 - A2))
+    cost = np.sum(logloss) / m
     ### END CODE HERE ###
 
     assert(isinstance(cost, float))
@@ -679,7 +679,7 @@ def compute_cost(A2, Y):
     return cost
 
 
-# In[ ]:
+# In[18]:
 
 
 print("cost = " + str(compute_cost(A2, Y)))
@@ -692,7 +692,7 @@ print("cost = " + str(compute_cost(A2, Y)))
 # cost = 0.6931477703826823
 # ```
 
-# In[ ]:
+# In[19]:
 
 
 # Note: 
@@ -711,7 +711,7 @@ w3_unittest.test_compute_cost(compute_cost, A2)
 # \frac{\partial \mathcal{L} }{ \partial b^{[1]}} &= \frac{1}{m}\left(\left(W^{[2]}\right)^T \left(A^{[2]} - Y\right)\cdot \left(A^{[1]}\cdot\left(1-A^{[1]}\right)\right)\right)\mathbf{1}.\\
 # \end{align}
 
-# In[ ]:
+# In[20]:
 
 
 def backward_propagation(parameters, cache, X, Y):
@@ -778,7 +778,7 @@ print("db2 = " + str(grads["db2"]))
 #     2. Retrieve each derivative from the dictionary "grads" (which is the output of `backward_propagation()`) by using `grads[".."]`.
 #     3. Update parameters.
 
-# In[ ]:
+# In[21]:
 
 
 def update_parameters(parameters, grads, learning_rate=1.2):
@@ -795,26 +795,26 @@ def update_parameters(parameters, grads, learning_rate=1.2):
     """
     # Retrieve each parameter from the dictionary "parameters".
     ### START CODE HERE ### (~ 4 lines of code)
-    W1 = None
-    b1 = None
-    W2 = None
-    b2 = None
+    W1 = parameters["W1"]
+    b1 = parameters["b1"]
+    W2 = parameters["W2"]
+    b2 = parameters["b2"]
     ### END CODE HERE ###
     
     # Retrieve each gradient from the dictionary "grads".
     ### START CODE HERE ### (~ 4 lines of code)
-    dW1 = None
-    db1 = None
-    dW2 = None
-    db2 = None
+    dW1 = grads["dW1"]
+    db1 = grads["db1"]
+    dW2 = grads["dW2"]
+    db2 = grads["db2"]
     ### END CODE HERE ###
     
     # Update rule for each parameter.
     ### START CODE HERE ### (~ 4 lines of code)
-    W1 = None
-    b1 = None
-    W2 = None
-    b2 = None
+    W1 -= learning_rate * dW1
+    b1 -= learning_rate * db1
+    W2 -= learning_rate * dW2
+    b2 -= learning_rate * db2
     ### END CODE HERE ###
     
     parameters = {"W1": W1,
@@ -825,7 +825,7 @@ def update_parameters(parameters, grads, learning_rate=1.2):
     return parameters
 
 
-# In[ ]:
+# In[22]:
 
 
 parameters_updated = update_parameters(parameters, grads)
@@ -848,7 +848,7 @@ print("b2 updated = " + str(parameters_updated["b2"]))
 # b2 updated = [[0.00094478]]
 # ```
 
-# In[ ]:
+# In[23]:
 
 
 w3_unittest.test_update_parameters(update_parameters)
@@ -864,7 +864,7 @@ w3_unittest.test_update_parameters(update_parameters)
 # 
 # **Instructions**: The neural network model has to use the previous functions in the right order.
 
-# In[ ]:
+# In[24]:
 
 
 # GRADED FUNCTION: nn_model
@@ -887,7 +887,7 @@ def nn_model(X, Y, n_h, num_iterations=10, learning_rate=1.2, print_cost=False):
     
     # Initialize parameters.
     ### START CODE HERE ### (~ 1 line of code)
-    parameters = None
+    parameters = initialize_parameters(n_x, n_h, n_y)
     ### END CODE HERE ###
     
     # Loop.
@@ -895,16 +895,16 @@ def nn_model(X, Y, n_h, num_iterations=10, learning_rate=1.2, print_cost=False):
          
         ### START CODE HERE ### (~ 4 lines of code)
         # Forward propagation. Inputs: "X, parameters". Outputs: "A2, cache".
-        A2, cache = None
+        A2, cache = forward_propagation(X, parameters)
         
         # Cost function. Inputs: "A2, Y". Outputs: "cost".
-        cost = None
+        cost = compute_cost(A2, Y)
         
         # Backpropagation. Inputs: "parameters, cache, X, Y". Outputs: "grads".
-        grads = None
+        grads = backward_propagation(parameters, cache, X, Y)
         
         # Gradient descent parameter update. Inputs: "parameters, grads, learning_rate". Outputs: "parameters".
-        parameters = None
+        parameters = update_parameters(parameters, grads, learning_rate)
         ### END CODE HERE ###
         
         # Print the cost every iteration.
@@ -914,7 +914,7 @@ def nn_model(X, Y, n_h, num_iterations=10, learning_rate=1.2, print_cost=False):
     return parameters
 
 
-# In[ ]:
+# In[25]:
 
 
 parameters = nn_model(X, Y, n_h=2, num_iterations=3000, learning_rate=1.2, print_cost=True)
@@ -953,7 +953,7 @@ b2 = parameters["b2"]
 # b2 = [[-3.48755239]]
 # ```
 
-# In[ ]:
+# In[26]:
 
 
 # Note: 
@@ -968,7 +968,7 @@ w3_unittest.test_nn_model(nn_model)
 # 
 # Computes probabilities using forward propagation, and make classification to 0/1 using 0.5 as the threshold.
 
-# In[ ]:
+# In[27]:
 
 
 # GRADED FUNCTION: predict
@@ -986,14 +986,14 @@ def predict(X, parameters):
     """
     
     ### START CODE HERE ### (≈ 2 lines of code)
-    A2, cache = None
-    predictions = None
+    A2, cache = forward_propagation(X, parameters)
+    predictions = (A2 >= 0.5).astype(int)
     ### END CODE HERE ###
     
     return predictions
 
 
-# In[ ]:
+# In[28]:
 
 
 X_pred = np.array([[2, 8, 2, 8], [2, 8, 8, 2]])
@@ -1013,7 +1013,7 @@ print(f"Predictions:\n{Y_pred}")
 # [[ True  True False False]]
 # ```
 
-# In[ ]:
+# In[29]:
 
 
 w3_unittest.test_predict(predict)
@@ -1021,7 +1021,7 @@ w3_unittest.test_predict(predict)
 
 # Let's visualize the boundary line. Do not worry if you don't understand the function `plot_decision_boundary` line by line - it simply makes prediction for some points on the plane and plots them as a contour plot (just two colors - blue and red).
 
-# In[ ]:
+# In[30]:
 
 
 def plot_decision_boundary(predict, parameters, X, Y):
@@ -1058,7 +1058,7 @@ plt.title("Decision Boundary for hidden layer size " + str(n_h))
 
 # Build a slightly different dataset:
 
-# In[ ]:
+# In[31]:
 
 
 n_samples = 2000
@@ -1077,7 +1077,7 @@ plt.scatter(X_2[0, :], X_2[1, :], c=Y_2, cmap=colors.ListedColormap(['blue', 're
 
 # Notice that when building your neural network, a number of the nodes in the hidden layer could be taken as a parameter. Try to change this parameter and investigate the results:
 
-# In[ ]:
+# In[32]:
 
 
 # parameters_2 = nn_model(X_2, Y_2, n_h=1, num_iterations=3000, learning_rate=1.2, print_cost=False)

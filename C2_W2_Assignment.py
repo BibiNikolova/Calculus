@@ -23,7 +23,7 @@
 # 
 # Load the required packages:
 
-# In[ ]:
+# In[1]:
 
 
 import numpy as np
@@ -37,7 +37,7 @@ from sklearn.linear_model import LinearRegression
 
 # Import the unit tests defined for this notebook.
 
-# In[ ]:
+# In[2]:
 
 
 import w2_unittest
@@ -53,17 +53,17 @@ import w2_unittest
 # 
 # Use `pandas` function `pd.read_csv` to open the .csv file the from the `path`.
 
-# In[ ]:
+# In[3]:
 
 
 path = "data/tvmarketing.csv"
 
 ### START CODE HERE ### (~ 1 line of code)
-adv = None.None(None)
+adv = pd.read_csv(path)
 ### END CODE HERE ###
 
 
-# In[ ]:
+# In[4]:
 
 
 # Print some part of the dataset.
@@ -81,7 +81,7 @@ adv.head()
 # 4	180.8	12.9
 # ```
 
-# In[ ]:
+# In[5]:
 
 
 w2_unittest.test_load_data(adv)
@@ -89,7 +89,7 @@ w2_unittest.test_load_data(adv)
 
 # `pandas` has a function to make plots from the DataFrame fields. By default, matplotlib is used at the backend. Let's use it here:
 
-# In[ ]:
+# In[6]:
 
 
 adv.plot(x='TV', y='Sales', kind='scatter', c='black')
@@ -102,7 +102,7 @@ adv.plot(x='TV', y='Sales', kind='scatter', c='black')
 
 # Save the required field of the DataFrame into variables `X` and `Y`:
 
-# In[ ]:
+# In[7]:
 
 
 X = adv['TV']
@@ -114,7 +114,7 @@ Y = adv['Sales']
 
 # You can use the function `np.polyfit(x, y, deg)` to fit a polynomial of degree `deg` to points $(x, y)$, minimising the sum of squared errors. You can read more in the [documentation](https://numpy.org/doc/stable/reference/generated/numpy.polyfit.html). Taking `deg = 1` you can obtain the slope `m` and the intercept `b` of the linear regression line:
 
-# In[ ]:
+# In[8]:
 
 
 m_numpy, b_numpy = np.polyfit(X, Y, 1)
@@ -126,7 +126,7 @@ print(f"Linear regression with NumPy. Slope: {m_numpy}. Intercept: {b_numpy}")
 
 # You can plot the linear regression line by running the following code. The regression line is red.
 
-# In[ ]:
+# In[9]:
 
 
 def plot_linear_regression(X, Y, x_label, y_label, m, b, X_pred=np.array([]), Y_pred=np.array([])):
@@ -147,19 +147,19 @@ plot_linear_regression(X, Y, 'TV', 'Sales', m_numpy, b_numpy)
 # 
 # Make predictions substituting the obtained slope and intercept coefficients into the equation $Y = mX + b$, given an array of $X$ values.
 
-# In[ ]:
+# In[10]:
 
 
 # This is organised as a function only for grading purposes.
 def pred_numpy(m, b, X):
     ### START CODE HERE ### (~ 1 line of code)
-    Y = None
+    Y = m * X + b
     ### END CODE HERE ###
     
     return Y
 
 
-# In[ ]:
+# In[11]:
 
 
 X_pred = np.array([50, 120, 280])
@@ -178,7 +178,7 @@ print(f"Predictions of sales using NumPy linear regression:\n{Y_pred_numpy}")
 # [ 9.40942557 12.7369904  20.34285287]
 # ```
 
-# In[ ]:
+# In[12]:
 
 
 w2_unittest.test_pred_numpy(pred_numpy)
@@ -186,7 +186,7 @@ w2_unittest.test_pred_numpy(pred_numpy)
 
 # Now you can add the prediction points to the plot (blue dots).
 
-# In[ ]:
+# In[13]:
 
 
 plot_linear_regression(X, Y, 'TV', 'Sales', m_numpy, b_numpy, X_pred, Y_pred_numpy)
@@ -199,7 +199,7 @@ plot_linear_regression(X, Y, 'TV', 'Sales', m_numpy, b_numpy, X_pred, Y_pred_num
 
 # Create an estimator object for a linear regression model:
 
-# In[ ]:
+# In[14]:
 
 
 lr_sklearn = LinearRegression()
@@ -207,7 +207,7 @@ lr_sklearn = LinearRegression()
 
 # The estimator can learn from data calling the `fit` function. However, trying to run the following code you will get an error, as the data needs to be reshaped into 2D array:
 
-# In[ ]:
+# In[15]:
 
 
 print(f"Shape of X array: {X.shape}")
@@ -221,7 +221,7 @@ except ValueError as err:
 
 # You can increase the dimension of the array by one with `reshape` function, or there is another another way to do it:
 
-# In[ ]:
+# In[16]:
 
 
 X_sklearn = X[:, np.newaxis]
@@ -236,15 +236,15 @@ print(f"Shape of new Y array: {Y_sklearn.shape}")
 # 
 # Fit the linear regression model passing `X_sklearn` and `Y_sklearn` arrays into the function `lr_sklearn.fit`.
 
-# In[ ]:
+# In[17]:
 
 
 ### START CODE HERE ### (~ 1 line of code)
-None.None(None, None)
+lr_sklearn.fit(X_sklearn, Y_sklearn)
 ### END CODE HERE ###
 
 
-# In[ ]:
+# In[18]:
 
 
 m_sklearn = lr_sklearn.coef_
@@ -259,7 +259,7 @@ print(f"Linear regression using Scikit-Learn. Slope: {m_sklearn}. Intercept: {b_
 # Linear regression using Scikit-Learn. Slope: [[0.04753664]]. Intercept: [7.03259355]
 # ```
 
-# In[ ]:
+# In[19]:
 
 
 w2_unittest.test_sklearn_fit(lr_sklearn)
@@ -273,20 +273,20 @@ w2_unittest.test_sklearn_fit(lr_sklearn)
 # 
 # Increase the dimension of the $X$ array using the function `np.newaxis` (see an example above) and pass the result to the `lr_sklearn.predict` function to make predictions.
 
-# In[ ]:
+# In[20]:
 
 
 # This is organised as a function only for grading purposes.
 def pred_sklearn(X, lr_sklearn):
     ### START CODE HERE ### (~ 2 lines of code)
-    X_2D = None[None, None.None]
-    Y = None.None(None)
+    X_2D = X[:, np.newaxis]
+    Y = lr_sklearn.predict(X_2D)
     ### END CODE HERE ###
     
     return Y
 
 
-# In[ ]:
+# In[21]:
 
 
 Y_pred_sklearn = pred_sklearn(X_pred, lr_sklearn)
@@ -304,7 +304,7 @@ print(f"Predictions of sales using Scikit_Learn linear regression:\n{Y_pred_skle
 # [[ 9.40942557 12.7369904  20.34285287]]
 # ```
 
-# In[ ]:
+# In[22]:
 
 
 w2_unittest.test_sklearn_predict(pred_sklearn, lr_sklearn)
@@ -346,7 +346,7 @@ w2_unittest.test_sklearn_predict(pred_sklearn, lr_sklearn)
 # 
 # Normalization is implemented in the following code:
 
-# In[ ]:
+# In[23]:
 
 
 X_norm = (X - np.mean(X))/np.std(X)
@@ -355,7 +355,7 @@ Y_norm = (Y - np.mean(Y))/np.std(Y)
 
 # Define cost function according to the equation $(1)$:
 
-# In[ ]:
+# In[24]:
 
 
 def E(m, b, X, Y):
@@ -368,13 +368,13 @@ def E(m, b, X, Y):
 # 
 # Define functions `dEdm` and `dEdb` to calculate partial derivatives according to the equations $(2)$. This can be done using vector form of the input data `X` and `Y`.
 
-# In[ ]:
+# In[25]:
 
 
 def dEdm(m, b, X, Y):
     ### START CODE HERE ### (~ 1 line of code)
     # Use the following line as a hint, replacing all None.
-    res = 1/len(None)*np.dot(None*None + None - None, None)
+    res = 1/len(Y)*np.dot((m * X + b - Y), X)
     ### END CODE HERE ###
     
     return res
@@ -383,13 +383,13 @@ def dEdm(m, b, X, Y):
 def dEdb(m, b, X, Y):
     ### START CODE HERE ### (~ 1 line of code)
     # Replace None writing the required expression fully.
-    res = None
+    res = 1/len(Y) * np.sum(m * X + b - Y)
     ### END CODE HERE ###
     
     return res
 
 
-# In[ ]:
+# In[26]:
 
 
 print(dEdm(0, 0, X_norm, Y_norm))
@@ -407,7 +407,7 @@ print(dEdb(1, 5, X_norm, Y_norm))
 # 5.000000000000002
 # ```
 
-# In[ ]:
+# In[27]:
 
 
 w2_unittest.test_partial_derivatives(dEdm, dEdb, X_norm, Y_norm)
@@ -425,14 +425,14 @@ w2_unittest.test_partial_derivatives(dEdm, dEdb, X_norm, Y_norm)
 # 
 # where $\alpha$ is the `learning_rate`.
 
-# In[ ]:
+# In[28]:
 
 
 def gradient_descent(dEdm, dEdb, m, b, X, Y, learning_rate = 0.001, num_iterations = 1000, print_cost=False):
     for iteration in range(num_iterations):
         ### START CODE HERE ### (~ 2 lines of code)
-        m_new = None
-        b_new = None
+        m_new = m - learning_rate * dEdm(m, b, X, Y)
+        b_new = b - learning_rate * dEdb(m, b, X, Y)
         ### END CODE HERE ###
         m = m_new
         b = b_new
@@ -442,7 +442,7 @@ def gradient_descent(dEdm, dEdb, m, b, X, Y, learning_rate = 0.001, num_iteratio
     return m, b
 
 
-# In[ ]:
+# In[29]:
 
 
 print(gradient_descent(dEdm, dEdb, 0, 0, X_norm, Y_norm))
@@ -456,7 +456,7 @@ print(gradient_descent(dEdm, dEdb, 1, 5, X_norm, Y_norm, learning_rate = 0.01, n
 # (0.9791767513915026, 4.521910375044022)
 # ```
 
-# In[ ]:
+# In[30]:
 
 
 w2_unittest.test_gradient_descent(gradient_descent, dEdm, dEdb, X_norm, Y_norm)
@@ -464,7 +464,7 @@ w2_unittest.test_gradient_descent(gradient_descent, dEdm, dEdb, X_norm, Y_norm)
 
 # Now run the gradient descent method starting from the initial point $\left(m_0, b_0\right)=\left(0, 0\right)$.
 
-# In[ ]:
+# In[31]:
 
 
 m_initial = 0; b_initial = 0; num_iterations = 30; learning_rate = 1.2
@@ -476,7 +476,7 @@ print(f"Gradient descent result: m_min, b_min = {m_gd}, {b_gd}")
 
 # Remember, that the initial datasets were normalized. To make the predictions, you need to normalize `X_pred` array, calculate `Y_pred` with the linear regression coefficients `m_gd`, `b_gd` and then **denormalize** the result (perform the reverse process of normalization):
 
-# In[ ]:
+# In[32]:
 
 
 X_pred = np.array([50, 120, 280])

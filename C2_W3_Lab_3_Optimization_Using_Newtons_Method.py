@@ -14,7 +14,7 @@
 # 
 # Run the following cell to load the packages you'll need.
 
-# In[ ]:
+# In[1]:
 
 
 import numpy as np
@@ -33,7 +33,7 @@ from matplotlib.gridspec import GridSpec
 # 
 # Let's optimize function $f\left(x\right)=e^x - \log(x)$ (defined for $x>0$) using Newton's method. To implement it in the code, define function $f\left(x\right)=e^x - \log(x)$, its first and second derivatives $f'(x)=e^x - \frac{1}{x}$, $f''(x)=e^x + \frac{1}{x^2}$:
 
-# In[ ]:
+# In[2]:
 
 
 def f_example_1(x):
@@ -53,7 +53,7 @@ print(f"f''({x_0}) = {d2fdx2_example_1(x_0)}")
 
 # Plot the function to visualize the global minimum:
 
-# In[ ]:
+# In[3]:
 
 
 def plot_f(x_range, y_range, f, ox_position):
@@ -81,7 +81,7 @@ plot_f([0.001, 2.5], [-0.3, 13], f_example_1, 0.0)
 
 # Implement Newton's method described above:
 
-# In[ ]:
+# In[5]:
 
 
 def newtons_method(dfdx, d2fdx2, x, num_iterations=100):
@@ -93,7 +93,7 @@ def newtons_method(dfdx, d2fdx2, x, num_iterations=100):
 
 # In addition to the first and second derivatives, there are two other parameters in this implementation: number of iterations `num_iterations`, initial point `x`. To optimize the function, set up the parameters and call the defined function gradient_descent:
 
-# In[ ]:
+# In[6]:
 
 
 num_iterations_example_1 = 25; x_initial = 1.6
@@ -105,7 +105,7 @@ print("Newton's method result: x_min =", newtons_example_1)
 # 
 # What if gradient descent was used starting from the same intial point?
 
-# In[ ]:
+# In[7]:
 
 
 def gradient_descent(dfdx, x, learning_rate=0.1, num_iterations=100):
@@ -144,7 +144,7 @@ print("Gradient descent result: x_min =", gd_example_1)
 # H\left(x, y\right) &= \begin{bmatrix}12x^2 + 8 - 0.4y && -1 - 0.4x \\ -1 - 0.4x && 9.6y^2 + 4\end{bmatrix}.
 # \end{align}
 
-# In[ ]:
+# In[8]:
 
 
 def f_example_2(x, y):
@@ -167,7 +167,7 @@ print(f"H{x_0, y_0} = \n{hessian_f_example_2(x_0, y_0)}")
 
 # Run the following cell to plot the function:
 
-# In[ ]:
+# In[9]:
 
 
 def plot_f_cont_and_surf(f):
@@ -214,7 +214,7 @@ plot_f_cont_and_surf(f_example_2)
 
 # Newton's method $(2)$ is implemented in the following function:
 
-# In[ ]:
+# In[10]:
 
 
 def newtons_method_2(f, grad_f, hessian_f, x_y, num_iterations=100):
@@ -226,7 +226,7 @@ def newtons_method_2(f, grad_f, hessian_f, x_y, num_iterations=100):
 
 # Now run the following code to find the minimum:
 
-# In[ ]:
+# In[11]:
 
 
 num_iterations_example_2 = 25; x_y_initial = np.array([[4], [4]])
@@ -237,7 +237,7 @@ print("Newton's method result: x_min, y_min =", newtons_example_2.T)
 
 # In this example starting from the initial point $(4, 4)$ it will converge after about $9$ iterations. Try to compare it with the gradient descent now:
 
-# In[ ]:
+# In[12]:
 
 
 def gradient_descent_2(grad_f, x_y, learning_rate=0.1, num_iterations=100):

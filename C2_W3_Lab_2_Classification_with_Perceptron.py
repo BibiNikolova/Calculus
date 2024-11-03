@@ -23,7 +23,7 @@
 # 
 # Let's first import all the packages that you will need during this lab.
 
-# In[ ]:
+# In[1]:
 
 
 import numpy as np
@@ -54,7 +54,7 @@ np.random.seed(3)
 # 
 # Here both $x_1$ and $x_2$ will be either $0$ or $1$. You can plot those points in a plane, and see the points (observations) belong to two classes, "angry" (red) and "happy" (blue), and a straight line can be used as a decision boundary to separate those two classes. An example of such a line is plotted. 
 
-# In[ ]:
+# In[2]:
 
 
 fig, ax = plt.subplots()
@@ -185,7 +185,7 @@ plt.plot()
 # 
 # Let's get the dataset you will work on. The following code will create $m=30$ data points $(x_1, x_2)$, where $x_1, x_2 \in \{0,1\}$ and save them in the `NumPy` array `X` of a shape $(2 \times m)$ (in the columns of the array). The labels ($0$: blue, $1$: red) will be calculated so that $y = 1$ if $x_1 = 0$ and $x_2 = 1$, in the rest of the cases $y=0$. The labels will be saved in the array `Y` of a shape $(1 \times m)$.
 
-# In[ ]:
+# In[3]:
 
 
 m = 30
@@ -208,7 +208,7 @@ print ('I have m = %d training examples!' % (X.shape[1]))
 # 
 # The sigmoid function $(2)$ for a variable $z$ can be defined with the following code:
 
-# In[ ]:
+# In[4]:
 
 
 def sigmoid(z):
@@ -221,7 +221,7 @@ print("sigmoid(3.5) = " + str(sigmoid(3.5)))
 
 # It can be applied to a `NumPy` array element by element:
 
-# In[ ]:
+# In[5]:
 
 
 print(sigmoid(np.array([-2, 0, 3.5])))
@@ -241,7 +241,7 @@ print(sigmoid(np.array([-2, 0, 3.5])))
 # 
 # using shapes of arrays `X` and `Y`.
 
-# In[ ]:
+# In[6]:
 
 
 def layer_sizes(X, Y):
@@ -269,7 +269,7 @@ print("The size of the output layer is: n_y = " + str(n_y))
 
 # Implement the function `initialize_parameters()`, initializing the weights array of shape $(n_y \times n_x) = (1 \times 1)$ with random values and the bias vector of shape $(n_y \times 1) = (1 \times 1)$ with zeros.
 
-# In[ ]:
+# In[7]:
 
 
 def initialize_parameters(n_x, n_y):
@@ -302,7 +302,7 @@ print("b = " + str(parameters["b"]))
 # A &= \sigma\left(Z\right).
 # \end{align}
 
-# In[ ]:
+# In[8]:
 
 
 def forward_propagation(X, parameters):
@@ -334,7 +334,7 @@ print("Output vector A:", A)
 # 
 # $$\mathcal{L}\left(W, b\right)  = \frac{1}{m}\sum_{i=1}^{m}  \large\left(\small -y^{(i)}\log\left(a^{(i)}\right) - (1-y^{(i)})\log\left(1- a^{(i)}\right)  \large  \right) \small.$$
 
-# In[ ]:
+# In[9]:
 
 
 def compute_cost(A, Y):
@@ -368,7 +368,7 @@ print("cost = " + str(compute_cost(A, Y)))
 # \frac{\partial \mathcal{L} }{ \partial b } &= \frac{1}{m}\left(A - Y\right)\mathbf{1}.
 # \end{align}
 
-# In[ ]:
+# In[10]:
 
 
 def backward_propagation(A, X, Y):
@@ -407,7 +407,7 @@ print("db = " + str(grads["db"]))
 # W &= W - \alpha \frac{\partial \mathcal{L} }{ \partial W },\\
 # b &= b - \alpha \frac{\partial \mathcal{L} }{ \partial b }.\end{align}
 
-# In[ ]:
+# In[11]:
 
 
 def update_parameters(parameters, grads, learning_rate=1.2):
@@ -450,7 +450,7 @@ print("b updated = " + str(parameters_updated["b"]))
 
 # Build your neural network model in `nn_model()`.
 
-# In[ ]:
+# In[13]:
 
 
 def nn_model(X, Y, num_iterations=10, learning_rate=1.2, print_cost=False):
@@ -493,7 +493,7 @@ def nn_model(X, Y, num_iterations=10, learning_rate=1.2, print_cost=False):
     return parameters
 
 
-# In[ ]:
+# In[14]:
 
 
 parameters = nn_model(X, Y, num_iterations=50, learning_rate=1.2, print_cost=True)
@@ -503,7 +503,7 @@ print("b = " + str(parameters["b"]))
 
 # You can see that after about $40$ iterations the cost function does keep decreasing, but not as much. It is a sign that it might be reasonable to stop training there. The final model parameters can be used to find the boundary line and for making predictions. Let's visualize the boundary line.
 
-# In[ ]:
+# In[15]:
 
 
 def plot_decision_boundary(X, Y, parameters):
@@ -523,7 +523,7 @@ plot_decision_boundary(X, Y, parameters)
 
 # And make some predictions:
 
-# In[ ]:
+# In[16]:
 
 
 def predict(X, parameters):
@@ -559,7 +559,7 @@ print(f"Predictions:\n{Y_pred}")
 # 
 # Construct a larger and more complex dataset with the function `make_blobs` from the `sklearn.datasets` library:
 
-# In[ ]:
+# In[17]:
 
 
 # Dataset
@@ -577,7 +577,7 @@ plt.scatter(X_larger[0, :], X_larger[1, :], c=Y_larger, cmap=colors.ListedColorm
 
 # And train your neural network for $100$ iterations.
 
-# In[ ]:
+# In[18]:
 
 
 parameters_larger = nn_model(X_larger, Y_larger, num_iterations=100, learning_rate=1.2, print_cost=False)
@@ -587,7 +587,7 @@ print("b = " + str(parameters_larger["b"]))
 
 # Plot the decision boundary:
 
-# In[ ]:
+# In[19]:
 
 
 plot_decision_boundary(X_larger, Y_larger, parameters_larger)
