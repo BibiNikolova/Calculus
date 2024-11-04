@@ -1,9 +1,0 @@
-Congratulations. You've
-finished week 1. This week you'll learn
-what a derivative is, how to calculate them, how to use them for optimization
-and most importantly, how this optimization problem is translated to machine
-learning problems. However, everything you've done so far is in one variable. As you may imagine, large machine-learning
-problems use lots and lots of variables. That's what you're
-going to learn next, how to do all this
-derivative stuff but in more variables.
-See you in week 2.
